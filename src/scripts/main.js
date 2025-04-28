@@ -356,34 +356,31 @@ const people = [
 
 // write your code here
 const board = document.querySelector('.dashboard');
+let tbody = board.querySelector('tbody');
+
+if (!tbody) {
+  tbody = document.createElement('tbody');
+
+  const thead = board.querySelector('thead');
+
+  if (thead) {
+    board.insertBefore(tbody, thead.nextSibling);
+  } else {
+    board.appendChild(tbody);
+  }
+}
 
 function createTableRow(person) {
   const row = document.createElement('tr');
-  const columnName = document.createElement('td');
-  const columnGender = document.createElement('td');
-  const columnBorn = document.createElement('td');
-  const columnDied = document.createElement('td');
-  const columnAge = document.createElement('td');
-  const columnCentury = document.createElement('td');
 
-  if (person.sex === 'm') {
-    columnGender.textContent = 'Male';
-  } else {
-    columnGender.textContent = 'Female';
-  }
-
-  columnName.textContent = person.name;
-  columnBorn.textContent = person.born;
-  columnDied.textContent = person.died;
-  columnAge.textContent = person.died - person.born;
-  columnCentury.textContent = Math.ceil(person.died / 100);
-
-  row.appendChild(columnName);
-  row.appendChild(columnGender);
-  row.appendChild(columnBorn);
-  row.appendChild(columnDied);
-  row.appendChild(columnAge);
-  row.appendChild(columnCentury);
+  row.innerHTML = `
+    <td>${person.name}</td>
+    <td>${person.sex === 'm' ? 'Male' : 'Female'}</td>
+    <td>${person.born}</td>
+    <td>${person.died}</td>
+    <td>${person.died - person.born}</td>
+    <td>${Math.ceil(person.died / 100)}</td>
+  `;
 
   return row;
 }
@@ -391,5 +388,5 @@ function createTableRow(person) {
 people.forEach((person) => {
   const row = createTableRow(person);
 
-  board.appendChild(row);
+  tbody.appendChild(row);
 });
